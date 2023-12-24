@@ -152,7 +152,7 @@ export class AuthService {
       },
     });
 
-    // save tghe otp in the database
+    // save the otp in the database of the user
     const updatItem = await this.userModel.findByIdAndUpdate(
       { _id: forgetPassword_OtpDto.id },
       { $set: { otp: random_number_AS_OTP } },
@@ -172,7 +172,7 @@ export class AuthService {
       {
         from: 'royhiark@gmail.com', // sender address
         to: updatItem.email, // list of receivers
-        subject: 'forget password. request for otp', // Subject line
+        subject: 'forget password. request for otp haimanti said', // Subject line
         text: `Hello user this is your otp: ${random_number_AS_OTP}. this OTP is valid for 15 munite`, // plain text body
         html: `Hello user this is your otp: ${random_number_AS_OTP}. this OTP is valid for 15 munite`, // html body
       },
@@ -217,14 +217,17 @@ export class AuthService {
 
       //varify the token
       const decoded = this.jwtService.verify(token);
+
       // get the user id form the token
-      //hash the new pass word
+      // hash the new pass word
       const hashedPssword = await bcrypt.hash(password, 10);
+
       //set the new password and find the user bt the token decode data
       const updatUser = await this.userModel.findByIdAndUpdate(
         { _id: decoded.id },
         { $set: { password: hashedPssword } },
       );
+
       if (!updatUser) throw new NotFoundException('user not found');
 
       return { status: 1, msg: 'password changed susecfully' };
